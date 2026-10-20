@@ -1,0 +1,13 @@
+{
+  "name": "taller-arquitectura-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "config": "node --env-file=.env scripts/generateConfig.js",
+    "test": "node --env-file=.env scripts/generateConfig.js && node --test"
+  },
+  "engines": {
+    "node": ">=20.6.0"
+  }
+}
