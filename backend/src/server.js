@@ -1,25 +1,34 @@
-const express = require("express");
-const cors = require("cors");
-const { TaskRepository } = require("./repository/taskRepository");
+const { loadConfig } = require("./config");
+const { createApp } = require("./app");
+const { TaskRepository } = require("./repositories/taskRepository");
 const { TaskService } = require("./services/taskService");
-const { createTaskController } = require("./controller/taskController");
-const { createTaskRoutes } = require("./routers/taskRoutes");
+const { asciiArt }  = require("./config");
 
-const app = express();
-const port = process.env.PORT || 3000;
+function startServer(config) {
+  const taskService = new TaskService(new TaskRepository());
+  const app = createApp({
+    taskService,
+    corsOrigins: config.corsOrigins,
+    frontendDir: config.frontendDir,
+    logError: console.error,
+  });
 
-app.use(cors());
-app.use(express.json());
+  const server = app.listen(config.port, () => {
+    const baseUrl = `http://localhost:${server.address().port}`;
+    console.log(asciiArt());
+    console.log(`API lista en ${baseUrl}/api`);
+    console.log(`Interfaz disponible en ${baseUrl}/`);
+  });
 
-const repository = new TaskRepository();
-const service = new TaskService(repository);
-const controller = createTaskController(service);
+  server.on("error", (error) => {
+    console.error(`No se pudo iniciar el servidor: ${error.message}`);
+    process.exitCode = 1;
+  });
+}
 
-app.get("/api/health", (req, res) => res.json({ status: "ok" }));
-app.use("/api/tasks", createTaskRoutes(controller));
-
-app.use((error, req, res, next) => {
-  res.status(error.statusCode || 500).json({ error: error.message || "Error interno del servidor" });
-});
-
-app.listen(port, () => console.log(`API lista en http://localhost:${port}`));
+try {
+  startServer(loadConfig(process.env));
+} catch (error) {
+  console.error(`Configuración inválida: ${error.message}`);
+  process.exitCode = 1;
+}
