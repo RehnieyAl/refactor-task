@@ -1,4 +1,4 @@
-const { Task } = require("./domain");
+const { Task } = require("./");
 
 class TaskRepository {
   constructor() {

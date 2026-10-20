@@ -1,9 +1,9 @@
 const express = require("express");
 const cors = require("cors");
-const { TaskRepository } = require("./taskRepository");
-const { TaskService } = require("./taskService");
-const { createTaskController } = require("./taskController");
-const { createTaskRoutes } = require("./taskRoutes");
+const { TaskRepository } = require("./repository/taskRepository");
+const { TaskService } = require("./services/taskService");
+const { createTaskController } = require("./controller/taskController");
+const { createTaskRoutes } = require("./routers/taskRoutes");
 
 const app = express();
 const port = process.env.PORT || 3000;
