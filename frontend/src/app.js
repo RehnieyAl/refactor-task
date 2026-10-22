@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api/tasks";
+
 const form = document.querySelector("#task-form");
 const titleInput = document.querySelector("#title");
 const descriptionInput = document.querySelector("#description");
@@ -97,3 +97,5 @@ taskList.addEventListener("click", async (event) => {
 });
 
 loadTasks();
+
+
